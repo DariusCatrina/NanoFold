@@ -57,8 +57,6 @@ class StructureNetwork(nn.Module):
             res_s =  self.trunk[f"{l}_skip_con"](s_initial)
             res_embed = torch.cat([s, res_s], dim=-1)
 
-            # ---> FIXED: Pass ~node_mask to prevent attending to PAD tokens
-            # (PyTorch Transformer expects True for tokens that should be ignored)
             trmf_out = self.trunk[f"{l}_trmf"](res_embed, src_key_padding_mask=~node_mask)
             
             s = s + self.trunk[f"{l}_trmf_proj"](trmf_out)

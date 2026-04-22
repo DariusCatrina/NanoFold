@@ -136,7 +136,7 @@ def train_nanofold():
             mask_bool = mask.bool()
             
             # ---------------------------------------------------------
-            # Center the Protein at the Origin to fix Translation spikes
+            # Center the Protein at the Origin
             # ---------------------------------------------------------
             ca_coords = coords[:, :, 1, :] 
             valid_ca = ca_coords * mask[..., None] 
@@ -195,7 +195,6 @@ def train_nanofold():
                 guess_frames = None
 
             # 3. Main Forward Pass (Gradient tracked)
-            # The model now receives its own previous guess to refine!
             out = model(raw_sequences, t, noisy_frames, self_cond_frames=guess_frames)
             pred_native_frames = out["frames"]
 
@@ -246,7 +245,7 @@ def train_nanofold():
                 del guess_frames
             
             # ---------------------------------------------------------
-            # NEW: Log Metrics to WandB
+            # Log Metrics to WandB
             # ---------------------------------------------------------
             wandb.log({
                 "train/total_loss": loss.item(),
@@ -262,7 +261,6 @@ def train_nanofold():
                 print(f"Epoch {epoch} | Batch {batch_idx} | Total: {loss.item():.4f} | "
                       f"Trans: {loss_trans.item():.4f} | Rot: {loss_rot.item():.4f}")
 
-    # Close the wandb run when finished
     wandb.finish()
 
 if __name__ == "__main__":
