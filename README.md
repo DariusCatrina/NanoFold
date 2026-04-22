@@ -38,3 +38,8 @@ chmod +x download_pdb.sh
 
 # Run the download script, passing the TSV file as an argument
 ./download_pdb.sh small_peptides.tsv
+```
+
+### 2. Training
+
+To train either call `python train.py` or if access to a slurm env: `sbatch train.sh`
